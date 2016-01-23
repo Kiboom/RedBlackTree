@@ -3,15 +3,17 @@ package test;
 import tree.Node;
 import tree.Tree;
 
-public class insertionTest {
+public class deletionTest {
+	static Node deleteNode;
 
 	public static void main(String[] args) {
-		littleDataTest(5, "ASC");
-	}
-	
-	
-	public static void littleDataTest(int nodeNum, String insertOrder) {
 		Tree tree = new Tree();
+		buildTree(tree, 10, "ASC");
+		tree.delete(deleteNode);
+		tree.print();
+	}
+
+	private static void buildTree(Tree tree, int nodeNum, String insertOrder) {
 		Node newNode;
 		
 		System.out.println("[" + nodeNum + "개의 노드를 입력하는 경우]\n");
@@ -30,9 +32,10 @@ public class insertionTest {
 					  return;
 			}
 			tree.insert(newNode);
+			deleteNode = newNode;
 		}
 		tree.print();
 		System.out.println("\n\n");
 	}
-
+	
 }
