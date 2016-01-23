@@ -62,51 +62,6 @@ public class Tree {
 		}
 		root.color = BLACK;
 	}
-	
-	
-	/*
-	private void insertFixup(Node nodeToFixup) {
-		while (nodeToFixup.parent.color == RED) {
-			if (nodeToFixup.parent == nodeToFixup.parent.parent.left){
-				Node uncle = nodeToFixup.parent.parent.right;
-				if (uncle.color == RED) {
-					nodeToFixup.parent.color = BLACK;
-					uncle.color = BLACK;
-					nodeToFixup.parent.parent.color = RED;
-					nodeToFixup = nodeToFixup.parent.parent;
-				}
-				else {
-					if (nodeToFixup == nodeToFixup.parent.right) {
-						nodeToFixup = nodeToFixup.parent;
-						leftRotate(nodeToFixup);
-					}
-					nodeToFixup.parent.color = BLACK;
-					nodeToFixup.parent.parent.color = RED;
-					rightRotate(nodeToFixup.parent.parent); 
-				}
-			}
-			else {
-				Node uncle = nodeToFixup.parent.parent.left;
-				if (uncle.color == RED) {
-					nodeToFixup.parent.color = BLACK;
-					uncle.color = BLACK;
-					nodeToFixup.parent.parent.color = RED;
-					nodeToFixup = nodeToFixup.parent.parent;
-				}
-				else {
-					if (nodeToFixup == nodeToFixup.parent.left) {
-						nodeToFixup = nodeToFixup.parent;
-						rightRotate(nodeToFixup);
-					}
-					nodeToFixup.parent.color = BLACK;
-					nodeToFixup.parent.parent.color = RED;
-					leftRotate(nodeToFixup.parent.parent);
-				}
-			}
-		}
-		root.color = BLACK;
-	}
-	*/
 
 	
 	
@@ -190,18 +145,18 @@ public class Tree {
 	
 	
 	public void print(){
-		List<Node> nodeList = new ArrayList<Node>(nodeCount+1);
+		List<Node> nodeList = new ArrayList<Node>();
 		List<Node> queue = new ArrayList<Node>();
 		nodeList.add(root);
 		queue.add(root);
 		while(queue.isEmpty() == false){
 			Node curNode = queue.remove(0);
+			nodeList.add(curNode.left);
 			if(curNode.left!=nil){
-				nodeList.add(curNode.left);
 				queue.add(curNode.left);
 			}
+			nodeList.add(curNode.right);
 			if(curNode.right!=nil){
-				nodeList.add(curNode.right);
 				queue.add(curNode.right);
 			}
 		}
@@ -209,27 +164,26 @@ public class Tree {
 		for(Node node : nodeList){
 			System.out.println(node.value + " " + node.color);
 		}
+		int height = (int)Math.ceil((Math.log10(nodeList.size())/Math.log10(2)));
+		int indent = height;
 		
-//		int height = (int)Math.ceil((Math.log10(nodeList.size())/Math.log10(2)));
-//		int indent = height;
-//		
-//		for(int levelStart=1; levelStart < nodeList.size() ; levelStart*=2, indent--){
-//			for(int i=0 ; i<=indent ; i++){
-//				System.out.print("	");
-//			}
-//			for(int pos=levelStart ; pos<2*levelStart ; pos++){
-//				if(pos>=nodeList.size()){
-//					System.out.println("");
-//					return;
-//				}
-//				if(pos%2==0){
-//					System.out.print(nodeList.get(pos) + "	       ");
-//				}else{
-//					System.out.print(nodeList.get(pos) + "  ");
-//				}
-//			}
-//			System.out.println("");
-//		}
-//		
+		for(int levelStart=1; levelStart < nodeList.size() ; levelStart*=2, indent--){
+
+			for(int pos=levelStart ; pos<2*levelStart ; pos++){
+				if(pos>=nodeList.size()){
+					System.out.println("");
+					return;
+				}
+				Node node = nodeList.get(pos);
+				String value = (node == nil) ? "n" : Integer.toString(node.value);
+				if(pos%2==0){
+					System.out.print(value + "   ");
+				}else{
+					System.out.print(value + "   ");
+				}
+			}
+			System.out.println("");
+		}
+		
 	}
 }
