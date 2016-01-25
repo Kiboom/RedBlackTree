@@ -1,38 +1,26 @@
 package test;
 
-import tree.Node;
 import tree.Tree;
 
 public class insertionTest {
 
 	public static void main(String[] args) {
-		littleDataTest(5, "ASC");
-	}
-	
-	
-	public static void littleDataTest(int nodeNum, String insertOrder) {
 		Tree tree = new Tree();
-		Node newNode;
 		
-		System.out.println("[" + nodeNum + "개의 노드를 입력하는 경우]\n");
-		
-		for(int i=0 ; i<nodeNum ; i++){
-			switch (insertOrder) {
-			case "ASC" : newNode = new Node(i); 
-						 break;
-			case "DSC" : newNode = new Node(nodeNum-i); 
-						 break;
-			case "RANDOM" : newNode = new Node((int)(Math.random()*nodeNum)); 
-						 	break;
-			case "EQUAL" : newNode = new Node(1); 
-							break;
-			default : System.out.println("ASC, DSC, RANDOM, EQUAL 중 하나를 입력하세요.");
-					  return;
-			}
-			tree.insert(newNode);
-		}
-		tree.print();
-		System.out.println("\n\n");
+		// parameter 1 : 삽입할 노드의 개수
+		// parameter 2 : 삽입할 노드의 키값 (ASC:키값을 증가시키며 삽입, DSC:키값을 감소시키며 삽입, RANDOM:랜덤한 키값으로 삽입, EQUAL:키값이 전부 같게 삽입) 
+		tree.buildTree(0, "ASC");		
+		tree.buildTree(1, "ASC");		 
+		tree.buildTree(3, "ASC");		 
+		tree.buildTree(5, "ASC");			
+		tree.buildTree(16, "ASC"); 
+		tree.buildTree(16, "DSC");	
+		tree.buildTree(16, "RANDOM");	 
+		tree.buildTree(16, "EQUAL");	 
+		tree.buildTree(150, "ASC");	 
+		tree.buildTree(150, "DSC");	 
+		tree.buildTree(150, "RANDOM"); 
+		tree.buildTree(150, "EQUAL");	 
 	}
-
+	
 }

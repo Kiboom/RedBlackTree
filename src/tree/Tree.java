@@ -143,6 +143,32 @@ public class Tree {
 	
 	
 	
+	public void buildTree(int nodeNum, String insertOrder) {
+		Node newNode;
+		String insertOrderInfo=null;
+		
+		for(int i=0 ; i<nodeNum ; i++){
+			switch (insertOrder) {
+			case "ASC" : newNode = new Node(i); insertOrderInfo="증가 순으로";
+						 break;
+			case "DSC" : newNode = new Node(nodeNum-i); insertOrderInfo="감소 순으로"; 
+						 break;
+			case "RANDOM" : newNode = new Node((int)(Math.random()*nodeNum)); insertOrderInfo="랜덤하게";
+						 	break;
+			case "EQUAL" : newNode = new Node(1); insertOrderInfo="전부 같은 값으로";
+							break;
+			default : System.out.println("ASC, DSC, RANDOM, EQUAL 중 하나를 입력하세요.");
+					  return;
+			}
+			insert(newNode);
+		}
+		System.out.println("[" + nodeNum + "개의 노드를 " + insertOrderInfo + " 입력하는 경우]\n");
+		print();
+		System.out.println("\nBlack Height : " + countBlackHeight(root) + "\n\n\n\n");
+	}
+	
+	
+	
 	
 	
 	/* DELETE 관련 메서드 */
@@ -182,7 +208,6 @@ public class Tree {
 				successor.right = node.right;
 				successor.right.parent = successor;
 			}
-			
 			// delete node의 윗 노드들에게 successor를 인수인계
 			transplant(node, successor);
 			successor.left = node.left;
@@ -193,7 +218,6 @@ public class Tree {
 		if (erasedColor == BLACK) {
 			deleteFixup(fixupNode, fixupParent);
 		}
-		
 		return true;
 	}
 	
@@ -325,7 +349,7 @@ public class Tree {
 	
 	
 	public Node[] treeToArray(){
-		Node[] nodeList = new Node[nodeCount*4];
+		Node[] nodeList = new Node[(nodeCount+1)*4];
 		nodeList[0] = nil;
 		nodeList[1] = root;
 
@@ -352,8 +376,27 @@ public class Tree {
 	
 	
 	
-	public boolean isBlackHeightAllSame(){
+	// Black Height의 개수를 반환. 경로별 Black Height 개수가 다르면 -1 반환.
+	public int countBlackHeight(Node root){
+		if (root==null || root==nil){
+			return 0;
+		}
 		
-		return true;
+		int leftBlackHeight = countBlackHeight(root.left);
+		int rightBlackHeight = countBlackHeight(root.right);
+		
+		if (root.left!=nil && root.left.color==BLACK){
+			leftBlackHeight++;
+		}
+		if (root.right!=nil && root.right.color==BLACK){
+			rightBlackHeight++;
+		}
+		
+		if (leftBlackHeight<0 || rightBlackHeight<0 || leftBlackHeight!=rightBlackHeight){
+			return -1;
+		}
+		else {
+			return leftBlackHeight;
+		}
 	}
 }
