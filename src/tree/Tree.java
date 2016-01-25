@@ -2,7 +2,7 @@ package tree;
 
 public class Tree {
 
-	int nodeCount;
+	int nodeCount = 0;
 	public Node root = nil;
 	
 	static final int RED = -1, BLACK = 1;
@@ -14,10 +14,19 @@ public class Tree {
 	
 	/* INSERT 관련 메서드 */
 	
+	public boolean insert(int value) {
+		Node newNode = new Node(value);
+		return insert(newNode);
+	}
+	
+	
+	
 	public boolean insert(Node newNode) {
 		if (newNode == null) {
 			return false;
 		}
+		System.out.println("[ 값이 " + newNode.value + "인 노드를 삽입합니다 ]\n");
+		
 		newNode.parent = searchInsertPosition(newNode);
 		newNode.left = nil;
 		newNode.right = nil;
@@ -26,6 +35,9 @@ public class Tree {
 		appendChild(newNode, newNode.parent);
 		insertFixup(newNode);
 		nodeCount++;
+		
+		print(); 
+		System.out.println("\nBlack Height : " + countBlackHeight(root) + "\n\n\n\n");
 		return true;
 	}
 
@@ -142,25 +154,24 @@ public class Tree {
 	}
 	
 	
-	
-	public void buildTree(int nodeNum, String insertOrder) {
-		Node newNode;
+	// nodeNum : 삽입할 노드의 개수
+	// insertOrder : 삽입할 노드의 키값 (ASC:키값을 증가시키며 삽입, DSC:키값을 감소시키며 삽입, RANDOM:랜덤한 키값으로 삽입, EQUAL:키값이 전부 같게 삽입) 
+	public void autoInsert(int nodeNum, String insertOrder) {
 		String insertOrderInfo=null;
 		
 		for(int i=0 ; i<nodeNum ; i++){
 			switch (insertOrder) {
-			case "ASC" : newNode = new Node(i); insertOrderInfo="증가 순으로";
+			case "ASC" : insert(i); insertOrderInfo="증가 순으로";
 						 break;
-			case "DSC" : newNode = new Node(nodeNum-i); insertOrderInfo="감소 순으로"; 
+			case "DSC" : insert(nodeNum-i); insertOrderInfo="감소 순으로"; 
 						 break;
-			case "RANDOM" : newNode = new Node((int)(Math.random()*nodeNum)); insertOrderInfo="랜덤하게";
+			case "RANDOM" : insert((int)(Math.random()*nodeNum)); insertOrderInfo="랜덤하게";
 						 	break;
-			case "EQUAL" : newNode = new Node(1); insertOrderInfo="전부 같은 값으로";
+			case "EQUAL" : insert(1); insertOrderInfo="전부 같은 값으로";
 							break;
 			default : System.out.println("ASC, DSC, RANDOM, EQUAL 중 하나를 입력하세요.");
 					  return;
 			}
-			insert(newNode);
 		}
 		System.out.println("[" + nodeNum + "개의 노드를 " + insertOrderInfo + " 입력하는 경우]\n");
 		print();
@@ -173,11 +184,27 @@ public class Tree {
 	
 	/* DELETE 관련 메서드 */
 	
-	public boolean delete (Node node) {
-		if (node==null || node==nil){
-			System.out.println("존재하지 않거나 삭제할 수 없는 노드입니다");
+	public boolean delete (int value) {
+		Node node = search(value);
+		if (node == null){
+			System.out.println("[ 존재하지 않거나 삭제할 수 없는 노드입니다 ]");
 			return false;
 		}
+		return delete(node);
+	}
+	
+	
+	
+	public boolean delete (Node node) {
+		if (nodeCount <= 0){
+			System.out.println("[ 레드블랙트리가 형성되지 않았습니다 ]");
+			return false;
+		}
+		if (node==null || node==nil){
+			System.out.println("[ 존재하지 않거나 삭제할 수 없는 노드입니다 ]");
+			return false;
+		}
+		
 		String color = (node.color == RED) ? "RED" : "BLACK";
 		System.out.println("[ " + node.value+"("+color+")"+" 노드를 삭제합니다 ]\n");
 		
@@ -218,6 +245,8 @@ public class Tree {
 		if (erasedColor == BLACK) {
 			deleteFixup(fixupNode, fixupParent);
 		}
+		print();
+		System.out.println("\nBlack Height : " + countBlackHeight(root) + "\n\n\n\n");
 		return true;
 	}
 	
@@ -318,7 +347,38 @@ public class Tree {
 	
 	
 	
+	/* SEARCH 관련 메서드 */
+	
+	public Node search(int value){ 
+		Node curNode = root;
+		
+		while(curNode!=nil){
+			if(curNode.value == value)
+				return curNode;
+			else if(curNode.value<value)
+				curNode = curNode.right;
+			else
+				curNode = curNode.left;
+		}
+		return null;
+	}
+	
+	
+	
+	public Node getLeafNode(){
+		Node curNode = root;
+		if(curNode==null || curNode==nil){
+			return null;
+		}
+		while(curNode.left==nil || curNode.right==nil){
+			curNode = curNode.left;
+		}
+		return curNode;
+	}
+	
+	
 
+	
 	/* PRINT 관련 메서드 */
 	
 	public void print(){
